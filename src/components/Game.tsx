@@ -1,7 +1,7 @@
-import styled from 'styled-components';
-import React, {useEffect, useState} from "react";
-import can from "../images/can.png"
-import tire from "../images/tire.png"
+import styled from "styled-components";
+import React, { useEffect, useState } from "react";
+import can from "../images/can.png";
+import tire from "../images/tire.png";
 
 const GameWrapper = styled.div`
   display: flex;
@@ -26,13 +26,12 @@ const GameViewContainer = styled.div`
   height: 75%;
   background-color: deepskyblue;
   position: relative;
-
-`
+`;
 const LegendContainer = styled.div`
   width: 25%;
   height: 90%;
   background-color: yellow;
-`
+`;
 const ButtonContainer = styled.div`
   width: 100%;
   height: 20%;
@@ -40,8 +39,7 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-
-`
+`;
 const StartButton = styled.button`
   background: #12254e;
   padding: 16px;
@@ -56,8 +54,8 @@ const StartButton = styled.button`
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
-`
+  transform: translate(-50%, -50%);
+`;
 const Control = styled.div`
   z-index: 2;
   height: 50%;
@@ -67,81 +65,87 @@ const Control = styled.div`
   :hover {
     background-color: dimgrey;
   }
-`
-const Image =styled.img<{position:number}>`
-width: 50px;
+`;
+const Image = styled.img<{ position: number }>`
+  width: 50px;
   position: absolute;
-  top:100%;
-  visibility: hidden;
-  left: ${props => props.position}%;
-`
+  top: 100%;
+  left: ${(props) => props.position}%;
+`;
 export const Game = () => {
-    const containerRef = React.useRef<HTMLDivElement | null>(null);
-    const [gameStarted, setGameStarted] = React.useState(false)
-    const ImageSlider = ( imageUrls:string[], displayTime:number) => {
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
+  const trashRef = React.useRef<HTMLImageElement | null>(null);
+  const [gameStarted, setGameStarted] = React.useState(false);
 
-        const [images, setImages] = useState([]);
+  const [currentImage, setCurrentImage] = useState({ id: 0, url: "" });
+  let imageUrls = [can, tire, can, tire];
 
-        useEffect(() => {
-            const timerId = setTimeout(() => {
-                const imageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
-                // @ts-ignore
-                setImages([...images, imageUrl]);
+  React.useEffect(() => {
+    if (gameStarted) {
+      setCurrentImage({
+        id: currentImage.id + 1,
+        url: imageUrls[Math.floor(Math.random() * 3)],
+      });
+    }
+  }, [gameStarted]);
 
-                setTimeout(() => {
-                    setImages(images.slice(1));
-                }, displayTime);
-            }, displayTime);
+  React.useEffect(() => {
+    if (gameStarted) {
+      setTimeout(() => {
+        if (
+          trashRef.current?.getBoundingClientRect().y &&
+          trashRef.current?.getBoundingClientRect().y > 600
+        ) {
+          setCurrentImage({
+            id: currentImage.id + 1,
+            url: imageUrls[Math.floor(Math.random() * 3)],
+          });
+        }
+      }, 2000);
+    }
+  }, [currentImage, gameStarted]);
 
-            return () => clearTimeout(timerId);
-        }, [images, imageUrls, displayTime]);
+  return (
+    <GameWrapper>
+      <LegendContainer></LegendContainer>
 
-        return (
-            <div className="image-slider">
-                {images.map((imageUrl, index) => (
-                    <Image position={Math.floor(Math.random() * 80)} src={imageUrl} alt="" key={index}
-                           className="slide-down"/>
-                ))}
-            </div>
-        );
-    };
-
-
-    let imageUrls=[can,tire,can,tire]
-
-
-
-    return <GameWrapper>
-
-        <LegendContainer></LegendContainer>
-
-        <MainContainer>
-            <GameViewContainer
-                ref={containerRef}
-                onClick={() =>
-                    console.log(
-                        "left:",
-                        containerRef?.current?.offsetLeft,
-                        "top:",
-                        containerRef?.current?.offsetTop
-                    )
-                }>
-                {!gameStarted && <StartButton
-                    onClick={() => {
-                        setGameStarted(true)
-                    }}
-
-                >START</StartButton> }
-                {ImageSlider(imageUrls, 3000)}
-
-            </GameViewContainer>
-            <ButtonContainer>
-                <Control></Control>
-                <Control></Control>
-                <Control></Control>
-            </ButtonContainer>
-
-        </MainContainer>
-
+      <MainContainer>
+        <GameViewContainer
+          ref={containerRef}
+          onClick={() =>
+            console.log(
+              "left:",
+              containerRef?.current?.offsetLeft,
+              "top:",
+              containerRef?.current?.offsetTop
+            )
+          }
+        >
+          {!gameStarted && (
+            <StartButton
+              onClick={() => {
+                setGameStarted(true);
+              }}
+            >
+              START
+            </StartButton>
+          )}
+          {
+            <Image
+              position={Math.floor(Math.random() * 80)}
+              src={currentImage.url}
+              ref={trashRef}
+              alt=""
+              className={`slide-down-${currentImage.id}`}
+            />
+          }
+        </GameViewContainer>
+        <ButtonContainer>
+          <Control></Control>
+          <Control></Control>
+          <Control></Control>
+        </ButtonContainer>
+      </MainContainer>
     </GameWrapper>
-}
+  );
+};
