@@ -2,6 +2,9 @@ import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import can from "../images/can.png";
 import tire from "../images/tire.png";
+import plastic from "../images/plastic.png";
+import metal from "../images/metal.png";
+import sticla from "../images/sticla.png";
 
 const GameWrapper = styled.div`
   display: flex;
@@ -58,18 +61,29 @@ const StartButton = styled.button`
 `;
 const Control = styled.div`
   z-index: 2;
-  height: 50%;
+  height: 60%;
   width: 20%;
   border-radius: 25px;
-  background-color: darkgrey;
+  background-color: white;
+  transition: 0.5s ease-in;
   :hover {
-    background-color: dimgrey;
+    background-color: darkgrey;
+    cursor: pointer;
+    >img{
+      transform: scale(1.1);
+    }
+  }
+  
+  >img {
+    transition: 0.5s ease-in;
+    height: 100%;
   }
 `;
 const Image = styled.img<{ position: number }>`
   width: 50px;
   position: absolute;
   top: 100%;
+  visibility: hidden;
   left: ${(props) => props.position}%;
 `;
 export const Game = () => {
@@ -136,14 +150,21 @@ export const Game = () => {
               src={currentImage.url}
               ref={trashRef}
               alt=""
-              className={`slide-down-${currentImage.id}`}
+              key={currentImage.id}
+              className={`slide-down`}
             />
           }
         </GameViewContainer>
         <ButtonContainer>
-          <Control></Control>
-          <Control></Control>
-          <Control></Control>
+          <Control>
+            <img src={plastic}/>
+          </Control>
+          <Control>
+            <img src={metal}/>
+          </Control>
+          <Control>
+            <img src={sticla}/>
+          </Control>
         </ButtonContainer>
       </MainContainer>
     </GameWrapper>
