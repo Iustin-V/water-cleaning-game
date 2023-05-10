@@ -11,3 +11,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+@keyframes slide-down {
+  from {
+   top:0;
+    visibility: visible;
+  }
+  to {
+    top:95%;
+    visibility: visible;
+  }
+}
+
+/* Apply the animation to the image element */
+img.slide-down {
+  animation: slide-down 2s ease-in;
+}
