@@ -1,28 +1,36 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 @keyframes slide-down {
   from {
-   top:0;
+    top: 0;
     visibility: visible;
   }
   to {
-    top:95%;
+    top: 95%;
     visibility: visible;
   }
 }
 
+.active {
+  background-color: dimgrey !important;
+  cursor: pointer;
+}
+.active>img{
+  transform: scale(1.1);
+}
 /* Apply the animation to the image element */
 img.slide-down {
+  -webkit-user-drag: none;
   animation: slide-down 2s ease-in;
 }

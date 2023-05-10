@@ -65,17 +65,17 @@ const Control = styled.div`
   width: 20%;
   border-radius: 25px;
   background-color: white;
-  transition: 0.5s ease-in;
+  transition: 0.2s ease-in;
   :hover {
     background-color: darkgrey;
     cursor: pointer;
-    >img{
+    > img {
       transform: scale(1.1);
     }
   }
-  
-  >img {
-    transition: 0.5s ease-in;
+
+  > img {
+    transition: 0.2s ease-in;
     height: 100%;
   }
 `;
@@ -88,10 +88,14 @@ const Image = styled.img<{ position: number }>`
 `;
 export const Game = () => {
   const containerRef = React.useRef<HTMLDivElement | null>(null);
+  const buttonOneRef = React.useRef<HTMLDivElement | null>(null);
+  const buttonTwoRef = React.useRef<HTMLDivElement | null>(null);
+  const buttonThreeRef = React.useRef<HTMLDivElement | null>(null);
   const trashRef = React.useRef<HTMLImageElement | null>(null);
   const [gameStarted, setGameStarted] = React.useState(false);
 
   const [currentImage, setCurrentImage] = useState({ id: 0, url: "" });
+  const [currentBasket, setCurrentBasket] = useState({ id: 0, url: "" });
   let imageUrls = [can, tire, can, tire];
 
   React.useEffect(() => {
@@ -119,6 +123,33 @@ export const Game = () => {
     }
   }, [currentImage, gameStarted]);
 
+  React.useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "a" || event.key === "A") {
+        // setCurrentBasket({ id: 1, url: "" });
+        console.log("aaaaaaa");
+        buttonOneRef.current?.classList.add("active");
+        buttonTwoRef.current?.classList.remove("active");
+        buttonThreeRef.current?.classList.remove("active");
+      }
+      if (event.key === "s" || event.key === "S") {
+        // setCurrentBasket({ id: 1, url: "" });
+        console.log("aaaaaaa");
+        buttonOneRef.current?.classList.remove("active");
+        buttonTwoRef.current?.classList.add("active");
+        buttonThreeRef.current?.classList.remove("active");
+      }
+      if (event.key === "d" || event.key === "D") {
+        // setCurrentBasket({ id: 1, url: "" });
+        console.log("aaaaaaa");
+        buttonOneRef.current?.classList.remove("active");
+        buttonTwoRef.current?.classList.remove("active");
+        buttonThreeRef.current?.classList.add("active");
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+  }, []);
   return (
     <GameWrapper>
       <LegendContainer></LegendContainer>
@@ -156,14 +187,14 @@ export const Game = () => {
           }
         </GameViewContainer>
         <ButtonContainer>
-          <Control>
-            <img src={plastic}/>
+          <Control ref={buttonOneRef}>
+            <img src={plastic} />
           </Control>
-          <Control>
-            <img src={metal}/>
+          <Control ref={buttonTwoRef}>
+            <img src={metal} />
           </Control>
-          <Control>
-            <img src={sticla}/>
+          <Control ref={buttonThreeRef}>
+            <img src={sticla} />
           </Control>
         </ButtonContainer>
       </MainContainer>
