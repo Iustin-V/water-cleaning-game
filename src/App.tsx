@@ -1,11 +1,13 @@
-import React from 'react';
-import './App.css';
-import {Game} from "./components/Game";
+import React from "react";
+import "./App.css";
+import { Game } from "./components/Game";
+import { Start } from "./components/Start";
 
 function App() {
+  const [startedGame, useStartedGame] = React.useState(false);
   return (
     <div className="App">
-<Game/>
+      {!startedGame ? <Start useStartedGame={useStartedGame} /> : <Game />}
     </div>
   );
 }
