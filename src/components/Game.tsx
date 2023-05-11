@@ -127,14 +127,14 @@ export const Game = () => {
   //  current data
   const [currentLevel, setCurrentLevel] = useState(0);
   const [currentImage, setCurrentImage] = useState({ id: 0, url: "" });
-  const [currentBasket, setCurrentBasket] = useState({ id: 0, url: "" });
+  const [currentBasket, setCurrentBasket] = useState(0);
 
   //  stats
   const [lives, setLives] = useState(3);
   const [score, setScore] = useState(0);
 
-  // let imageUrls = [can, tire, can, tire];
-  let imageUrls = [tire, tire, tire, tire];
+  let imageUrls = [can, tire, can, tire];
+  // let imageUrls = [tire, tire, tire, tire];
 
   // game logic
   const handleGameReset = () => {
@@ -145,8 +145,8 @@ export const Game = () => {
   };
 
   const handleBasket = (id: number) => {
-    setCurrentBasket({ id: id, url: "" });
-    console.log("currentbasket", currentBasket.id);
+    setCurrentBasket(id);
+    console.log("currentbasket", currentBasket);
 
     buttonOneRef.current?.classList.remove("active");
     buttonTwoRef.current?.classList.remove("active");
@@ -195,10 +195,10 @@ export const Game = () => {
             trashRef.current?.getBoundingClientRect().y &&
             trashRef.current?.getBoundingClientRect().y > 550
           ) {
-            console.log(currentBasket.id, currentImage.url);
+            console.log(currentBasket, currentImage.url);
             if (
-              (currentBasket.id === 0 && currentImage.url === tire) ||
-              (currentBasket.id === 1 && currentImage.url === can)
+              (currentBasket === 0 && currentImage.url === tire) ||
+              (currentBasket === 1 && currentImage.url === can)
             ) {
               setScore(score + 100);
             } else {
