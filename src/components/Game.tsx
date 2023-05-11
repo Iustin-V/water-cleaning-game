@@ -88,7 +88,7 @@ const StartButton = styled.button`
 `;
 const Control = styled.div`
   z-index: 2;
-  height: 60%;
+  height: 80%;
   width: 20%;
   border-radius: 25px;
   background-color: white;
