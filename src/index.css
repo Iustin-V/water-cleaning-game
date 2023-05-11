@@ -49,18 +49,82 @@ code {
 }
 
 .start-button {
-  animation: fish-enter 1.6s ease-in;
+  /*animation: fish-enter 1.6s ease-in;*/
+
+  animation: sink 1s ease-in-out forwards, wiggle 3.5s infinite; /* Add animation properties here */
+}
+@keyframes sink {
+  0% {
+    top: -50px;
+  }
+  100% {
+    top: 50%; /* End at the middle of the screen */
+  }
+}
+
+/* Create the wiggle animation */
+@keyframes wiggle {
+  0% {
+    transform: translate(-50%, -50%);
+  }
+  50% {
+    transform: translate(-50%, calc(-50% + 10px));
+  }
+  100% {
+    transform: translate(-50%, -50%);
+  }
 }
 
 .active {
   background-color: dimgrey !important;
   cursor: pointer;
 }
-.active>img{
+.active > img {
   transform: scale(1.1);
 }
 /* Apply the animation to the image element */
 img.slide-down {
   -webkit-user-drag: none;
   animation: slide-down 2s ease-in;
+}
+
+a {
+  font-weight: bold;
+  font-family: sans-serif;
+  text-decoration: none;
+  color: transparent;
+  background: url("https://wweb.dev/resources/creative-hover-effects/wave.svg")
+    repeat-x #fff;
+  background-position-x: 0%;
+  background-position-y: 0%;
+  background-size: auto;
+  background-clip: border-box;
+  -webkit-background-clip: text;
+  background-size: 200% 100%;
+  background-position-x: 0;
+  background-position-y: 2em;
+  -webkit-transition: background-position-y 0.6s ease;
+  transition: background-position-y 0.6s ease;
+  -webkit-animation: waveAnimation 4s infinite linear;
+  animation: waveAnimation 4s infinite linear;
+  animation-play-state: running;
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+}
+
+.start-button:hover a,
+a:hover {
+  background-position-x: 0;
+  background-position-y: 0;
+  -webkit-animation-play-state: running;
+  animation-play-state: running;
+}
+
+@keyframes waveAnimation {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: 200%;
+  }
 }

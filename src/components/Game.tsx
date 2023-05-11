@@ -6,7 +6,7 @@ import plastic from "../images/plastic.png";
 import metal from "../images/metal.png";
 import sticla from "../images/sticla.png";
 import heart from "../images/heart.png";
-import watereffect from "../images/water.gif"
+import watereffect from "../images/water.gif";
 
 const GameWrapper = styled.div`
   display: flex;
@@ -52,14 +52,14 @@ const ButtonContainer = styled.div`
   align-items: center;
   border: 3px solid black;
   border-radius: 20px;
-  >div{
+  > div {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     width: 100%;
     height: 100%;
   }
-  >h2{
+  > h2 {
     margin: -43px 0 0 0;
   }
 `;
@@ -80,6 +80,7 @@ const StartButton = styled.button`
   position: absolute;
   top: 50%;
   left: 50%;
+  margin: 0 auto;
   transform: translate(-50%, -50%);
 
   > span {
@@ -124,7 +125,6 @@ const LivesContainer = styled.div`
   flex-direction: row;
   gap: 12px;
   z-index: 51;
-  
 `;
 const ScoreContainer = styled.div`
   top: 15px;
@@ -134,12 +134,15 @@ const ScoreContainer = styled.div`
   flex-direction: row;
   gap: 15px;
   z-index: 51;
-  
+
+  font-weight: 700;
+  font-size: 17px;
+  color: white;
+  height: 24px;
 `;
 const Heart = styled.img`
   width: 24px;
   z-index: 51;
-  
 `;
 const WaterEffect = styled.img`
   position: absolute;
@@ -151,7 +154,7 @@ const WaterEffect = styled.img`
   z-index: 50;
   opacity: 30%;
   pointer-events: none;
-`
+`;
 export const Game = () => {
   //  refs
   const containerRef = React.useRef<HTMLDivElement | null>(null);
@@ -216,13 +219,13 @@ export const Game = () => {
       });
       setTimeout(() => {
         if (
-            trashRef.current?.getBoundingClientRect().y &&
-            trashRef.current?.getBoundingClientRect().y > 550
+          trashRef.current?.getBoundingClientRect().y &&
+          trashRef.current?.getBoundingClientRect().y > 550
         ) {
           console.log(currentBasket, currentImage.url);
           if (
-              (currentBasket === 0 && currentImage.url === tire) ||
-              (currentBasket === 1 && currentImage.url === can)
+            (currentBasket === 0 && currentImage.url === tire) ||
+            (currentBasket === 1 && currentImage.url === can)
           ) {
             setScore(score + 100);
           } else {
@@ -256,8 +259,8 @@ export const Game = () => {
           ) {
             console.log(currentBasket, currentImage.url);
             if (
-                (currentBasket === 0 && currentImage.url === tire) ||
-                (currentBasket === 1 && currentImage.url === can)
+              (currentBasket === 0 && currentImage.url === tire) ||
+              (currentBasket === 1 && currentImage.url === can)
             ) {
               setScore(score + 100);
             } else {
@@ -310,7 +313,7 @@ export const Game = () => {
             )
           }
         >
-          <WaterEffect src={watereffect} alt={"watter effect"}></WaterEffect>
+          <WaterEffect src={watereffect} alt={"watter effect"} />
           <ScoreContainer>
             {score} / {nextLevelScore}
           </ScoreContainer>
@@ -321,12 +324,13 @@ export const Game = () => {
           </LivesContainer>
           {!gameStarted && (
             <StartButton
-                className={"start-button"}
+              className={"start-button"}
               onClick={() => {
                 setGameStarted(true);
               }}
             >
-             <span>START</span><br/> Level {currentLevel}
+              <a href="#">START
+              <br /> Level {currentLevel}</a>
             </StartButton>
           )}
           {
@@ -342,17 +346,17 @@ export const Game = () => {
           }
         </GameViewContainer>
         <ButtonContainer>
-          <h2>SELECTEAZA COSUL CORECT:</h2>
+          <h2 style={{ color: "white" }}>SELECTEAZA COSUL CORECT:</h2>
           <div>
-          <Control ref={buttonOneRef} onClick={() => handleBasket(0)}>
-            <img src={plastic} onClick={() => handleBasket(0)} />
-          </Control>
-          <Control ref={buttonTwoRef} onClick={() => handleBasket(1)}>
-            <img src={metal} onClick={() => handleBasket(1)} />
-          </Control>
-          <Control ref={buttonThreeRef} onClick={() => handleBasket(2)}>
-            <img src={sticla} onClick={() => handleBasket(2)} />
-          </Control>
+            <Control ref={buttonOneRef} onClick={() => handleBasket(0)}>
+              <img src={plastic} onClick={() => handleBasket(0)} />
+            </Control>
+            <Control ref={buttonTwoRef} onClick={() => handleBasket(1)}>
+              <img src={metal} onClick={() => handleBasket(1)} />
+            </Control>
+            <Control ref={buttonThreeRef} onClick={() => handleBasket(2)}>
+              <img src={sticla} onClick={() => handleBasket(2)} />
+            </Control>
           </div>
         </ButtonContainer>
       </MainContainer>
