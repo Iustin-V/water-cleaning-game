@@ -9,6 +9,22 @@ const StatWrapper = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 40px;
+
+  > button {
+    font-size: 40px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: black;
+    background: green;
+    border: 3px solid black;
+    border-radius: 20px;
+    padding: 16px 32px;
+
+    :hover {
+      background: #388638;
+      cursor: pointer;
+    }
+  }
 `;
 
 interface startProps {
