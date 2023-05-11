@@ -6,6 +6,7 @@ import plastic from "../images/plastic.png";
 import metal from "../images/metal.png";
 import sticla from "../images/sticla.png";
 import heart from "../images/heart.png";
+import watereffect from "../images/water.gif"
 
 const GameWrapper = styled.div`
   display: flex;
@@ -28,37 +29,62 @@ const MainContainer = styled.div`
 const GameViewContainer = styled.div`
   width: 100%;
   height: 75%;
-  background-color: deepskyblue;
+  background-color: #18586bf0;
+  overflow: hidden;
   position: relative;
+  border: 3px solid black;
+  border-radius: 20px;
 `;
 const LegendContainer = styled.div`
   width: 25%;
   height: 90%;
-  background-color: yellow;
+  background-color: rgba(52, 155, 16, 0.82);
+  border: 3px solid black;
+  border-radius: 20px;
 `;
 const ButtonContainer = styled.div`
   width: 100%;
   height: 20%;
-  background-color: red;
+  background-color: rgba(77, 36, 3, 0.9);
   display: flex;
+  flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+  border: 3px solid black;
+  border-radius: 20px;
+  >div{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+  >h2{
+    margin: -43px 0 0 0;
+  }
 `;
 const StartButton = styled.button`
   background: #12254e;
   padding: 16px;
-  border: 2px solid red;
+  border: 2px solid #000000;
   border-radius: 15px;
   color: white;
   font-weight: bold;
+  font-size: 30px;
+  z-index: 51;
 
   :hover {
     background: #2550ad;
   }
+
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+
+  > span {
+    font-size: 40px;
+  }
 `;
 const Control = styled.div`
   z-index: 2;
@@ -96,7 +122,9 @@ const LivesContainer = styled.div`
   display: flex;
   position: absolute;
   flex-direction: row;
-  gap: 15px;
+  gap: 12px;
+  z-index: 51;
+  
 `;
 const ScoreContainer = styled.div`
   top: 15px;
@@ -105,10 +133,25 @@ const ScoreContainer = styled.div`
   position: absolute;
   flex-direction: row;
   gap: 15px;
+  z-index: 51;
+  
 `;
 const Heart = styled.img`
-  width: 20px;
+  width: 24px;
+  z-index: 51;
+  
 `;
+const WaterEffect = styled.img`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  opacity: 30%;
+  pointer-events: none;
+`
 export const Game = () => {
   //  refs
   const containerRef = React.useRef<HTMLDivElement | null>(null);
@@ -171,6 +214,22 @@ export const Game = () => {
         id: currentImage.id + 1,
         url: imageUrls[Math.floor(Math.random() * 3)],
       });
+      setTimeout(() => {
+        if (
+            trashRef.current?.getBoundingClientRect().y &&
+            trashRef.current?.getBoundingClientRect().y > 550
+        ) {
+          console.log(currentBasket, currentImage.url);
+          if (
+              (currentBasket === 0 && currentImage.url === tire) ||
+              (currentBasket === 1 && currentImage.url === can)
+          ) {
+            setScore(score + 100);
+          } else {
+            setLives(lives - 1);
+          }
+        }
+      }, 2000);
     }
   }, [gameStarted]);
 
@@ -197,8 +256,8 @@ export const Game = () => {
           ) {
             console.log(currentBasket, currentImage.url);
             if (
-              (currentBasket === 0 && currentImage.url === tire) ||
-              (currentBasket === 1 && currentImage.url === can)
+                (currentBasket === 0 && currentImage.url === tire) ||
+                (currentBasket === 1 && currentImage.url === can)
             ) {
               setScore(score + 100);
             } else {
@@ -251,6 +310,7 @@ export const Game = () => {
             )
           }
         >
+          <WaterEffect src={watereffect} alt={"watter effect"}></WaterEffect>
           <ScoreContainer>
             {score} / {nextLevelScore}
           </ScoreContainer>
@@ -261,11 +321,12 @@ export const Game = () => {
           </LivesContainer>
           {!gameStarted && (
             <StartButton
+                className={"start-button"}
               onClick={() => {
                 setGameStarted(true);
               }}
             >
-              START Level {currentLevel}
+             <span>START</span><br/> Level {currentLevel}
             </StartButton>
           )}
           {
@@ -281,6 +342,8 @@ export const Game = () => {
           }
         </GameViewContainer>
         <ButtonContainer>
+          <h2>SELECTEAZA COSUL CORECT:</h2>
+          <div>
           <Control ref={buttonOneRef} onClick={() => handleBasket(0)}>
             <img src={plastic} onClick={() => handleBasket(0)} />
           </Control>
@@ -290,6 +353,7 @@ export const Game = () => {
           <Control ref={buttonThreeRef} onClick={() => handleBasket(2)}>
             <img src={sticla} onClick={() => handleBasket(2)} />
           </Control>
+          </div>
         </ButtonContainer>
       </MainContainer>
     </GameWrapper>

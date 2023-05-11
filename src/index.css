@@ -21,6 +21,36 @@ code {
     visibility: visible;
   }
 }
+@keyframes fish-enter {
+  0% {
+    left: 0;
+    top: 60%;
+    transform: rotate(-30deg);
+    opacity: 0;
+  }
+  30% {
+    left: 20%;
+    top: 45%;
+    transform: rotate(30deg);
+
+    opacity: 1;
+  }
+  60% {
+    left: 35%;
+    top: 55%;
+    transform: rotate(-30deg);
+    opacity: 1;
+  }
+  100% {
+    left: 50%;
+    top: 50%;
+    opacity: 1;
+  }
+}
+
+.start-button {
+  animation: fish-enter 1.6s ease-in;
+}
 
 .active {
   background-color: dimgrey !important;
