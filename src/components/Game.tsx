@@ -2,6 +2,8 @@ import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import can from "../images/can.png";
 import tire from "../images/tire.png";
+import bottle1 from "../images/bottle1.png";
+import bottle2 from "../images/bottle2.png";
 import plastic from "../images/plastic.png";
 import metal from "../images/metal.png";
 import sticla from "../images/sticla.png";
@@ -105,6 +107,7 @@ const Control = styled.div`
   > img {
     transition: 0.2s ease-in;
     height: 100%;
+    -webkit-user-drag: none;
   }
 `;
 const Image = styled.img<{ position: number; animationDuration?: number }>`
@@ -155,6 +158,26 @@ const WaterEffect = styled.img`
   opacity: 30%;
   pointer-events: none;
 `;
+
+const Catch = styled.div`
+  bottom: 20px;
+  color: white;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+`;
+const LegendCategory = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  > p {
+    color: white;
+    font-size: 20px;
+  }
+`;
 export const Game = () => {
   //  refs
   const containerRef = React.useRef<HTMLDivElement | null>(null);
@@ -165,7 +188,9 @@ export const Game = () => {
 
   // essentials
   const [gameStarted, setGameStarted] = React.useState(false);
+  const [timeoutBool, setTimeoutBool] = React.useState(false);
   const [nextLevelScore, setNextLevelScore] = useState(500);
+  const [lastCatch, setLastCatch] = useState({ name: "", url: "" });
   const [imgPosition, setImgPosition] = React.useState(
     Math.floor(Math.random() * 80)
   );
@@ -173,13 +198,13 @@ export const Game = () => {
   //  current data
   const [currentLevel, setCurrentLevel] = useState(0);
   const [currentImage, setCurrentImage] = useState({ id: 0, url: "" });
-  const [currentBasket, setCurrentBasket] = useState(0);
+  const [currentBasket, setCurrentBasket] = useState(4);
 
   //  stats
   const [lives, setLives] = useState(3);
   const [score, setScore] = useState(0);
 
-  let imageUrls = [can, tire, can, tire];
+  let imageUrls = [can, tire, can, tire, bottle1, bottle2];
   // let imageUrls = [tire, tire, tire, tire];
 
   // game logic
@@ -187,6 +212,7 @@ export const Game = () => {
     setGameStarted(false);
     setScore(0);
     setLives(3);
+    setCurrentBasket(4);
     setCurrentImage({ id: 0, url: "" });
   };
 
@@ -215,7 +241,7 @@ export const Game = () => {
       setImgPosition(Math.floor(Math.random() * 80));
       setCurrentImage({
         id: currentImage.id + 1,
-        url: imageUrls[Math.floor(Math.random() * 3)],
+        url: imageUrls[Math.floor(Math.random() * 5)],
       });
       setTimeout(() => {
         if (
@@ -252,30 +278,47 @@ export const Game = () => {
           handleGameReset();
         }
       } else {
-        setTimeout(() => {
+        if (
+          trashRef.current?.getBoundingClientRect().y &&
+          trashRef.current?.getBoundingClientRect().y > 550
+        ) {
+          console.log(currentBasket, currentImage.url);
           if (
-            trashRef.current?.getBoundingClientRect().y &&
-            trashRef.current?.getBoundingClientRect().y > 550
+            (currentBasket === 0 && currentImage.url === tire) ||
+            (currentBasket === 1 && currentImage.url === can) ||
+            (currentBasket === 2 && currentImage.url === bottle1) ||
+            (currentBasket === 2 && currentImage.url === bottle2)
           ) {
-            console.log(currentBasket, currentImage.url);
-            if (
-              (currentBasket === 0 && currentImage.url === tire) ||
-              (currentBasket === 1 && currentImage.url === can)
-            ) {
-              setScore(score + 100);
-            } else {
-              setLives(lives - 1);
+            setScore(score + 100);
+            switch (currentBasket) {
+              case 0:
+                setLastCatch({
+                  name: "deseu de plastic",
+                  url: currentImage.url,
+                });
+                break;
+              case 1:
+                setLastCatch({ name: "deseu de metal", url: currentImage.url });
+                break;
+              case 2:
+                setLastCatch({
+                  name: "deseu de sticla",
+                  url: currentImage.url,
+                });
+                break;
             }
-            setImgPosition(Math.floor(Math.random() * 80));
-            setCurrentImage({
-              id: currentImage.id + 1,
-              url: imageUrls[Math.floor(Math.random() * 3)],
-            });
+          } else {
+            setLives(lives - 1);
           }
-        }, 2000);
+          setImgPosition(Math.floor(Math.random() * 80));
+          setCurrentImage({
+            id: currentImage.id + 1,
+            url: imageUrls[Math.floor(Math.random() * 5)],
+          });
+        }
       }
     }
-  }, [currentImage, gameStarted]);
+  }, [timeoutBool, gameStarted]);
 
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -293,13 +336,40 @@ export const Game = () => {
     window.addEventListener("keydown", handleKeyDown);
   }, []);
 
+  setInterval(() => {
+    setTimeoutBool(!timeoutBool);
+  }, 2000);
+
   /* nu merge schimbarea duratiei animatiei, 
   nu merge selectarea cosului pentru runda curenta, 
   schimbarea are loc abia runda urm*/
 
   return (
     <GameWrapper>
-      <LegendContainer></LegendContainer>
+      <LegendContainer>
+        {lastCatch.name && (
+          <Catch>
+            Ai prins un {lastCatch.name}
+            <img
+              style={{ height: "30px", width: "30px" }}
+              src={lastCatch.url}
+            />
+          </Catch>
+        )}
+        <LegendCategory>
+          <p> Deseuri de plastic:</p>
+          <img style={{ height: "50px", width: "50px" }} src={tire} />
+        </LegendCategory>
+        <LegendCategory>
+          <p> Deseuri de metal:</p>
+          <img style={{ height: "50px", width: "50px" }} src={can} />
+        </LegendCategory>
+        <LegendCategory>
+          <p> Deseuri de sticla:</p>
+          <img style={{ height: "50px", width: "50px" }} src={bottle1} />
+          <img style={{ height: "50px", width: "50px" }} src={bottle2} />
+        </LegendCategory>
+      </LegendContainer>
 
       <MainContainer>
         <GameViewContainer
@@ -329,8 +399,10 @@ export const Game = () => {
                 setGameStarted(true);
               }}
             >
-              <a href="#">START
-              <br /> Level {currentLevel}</a>
+              <a href="#">
+                START
+                <br /> Level {currentLevel}
+              </a>
             </StartButton>
           )}
           {
