@@ -4,6 +4,11 @@ import can from "../images/can.png";
 import tire from "../images/tire.png";
 import bottle1 from "../images/bottle1.png";
 import bottle2 from "../images/bottle2.png";
+import bag from "../images/bag.png";
+import bluebottle from "../images/bluebottle.png";
+import bottle from "../images/bottle.png";
+import conserve from "../images/conserve.png";
+import key from "../images/key.png";
 import plastic from "../images/plastic.png";
 import metal from "../images/metal.png";
 import sticla from "../images/sticla.png";
@@ -40,6 +45,16 @@ const GameViewContainer = styled.div`
   position: relative;
   border: 3px solid black;
   border-radius: 20px;
+  >h2 {
+    position: absolute;
+    font-size: 30px;
+    color: white;
+    text-align: center;
+    bottom: 30px;
+    left: 50%;
+    z-index: 20;
+    transform: translateX(-50%);
+  }
 `;
 const LegendContainer = styled.div`
   width: 25%;
@@ -218,8 +233,10 @@ export const Game = () => {
   const [lives, setLives] = useState(3);
   const [score, setScore] = useState(0);
 
-  let imageUrls = [can, tire, can, tire, bottle1, bottle2];
-  // let imageUrls = [tire, tire, tire, tire];
+  let imageUrls = [can, tire, can, tire, bottle1, bottle2, bottle, bag, bluebottle, key, conserve];
+  let plasticGarbage = [tire, bottle, bag, bluebottle];
+  let metalGarbage=[can,key,conserve]
+  let glassGarbage=[bottle1,bottle2]
 
   // game logic
   const handleGameReset = () => {
@@ -254,7 +271,7 @@ export const Game = () => {
       setImgPosition(Math.floor(Math.random() * 80));
       setCurrentImage({
         id: currentImage.id + 1,
-        url: imageUrls[Math.floor(Math.random() * 5)],
+        url: imageUrls[Math.floor(Math.random() * 11)],
       });
     }
   }, [gameStarted]);
@@ -281,10 +298,9 @@ export const Game = () => {
           trashRef.current?.getBoundingClientRect().y > 550
         ) {
           if (
-            (currentBasket === 0 && currentImage.url === tire) ||
-            (currentBasket === 1 && currentImage.url === can) ||
-            (currentBasket === 2 && currentImage.url === bottle1) ||
-            (currentBasket === 2 && currentImage.url === bottle2)
+            (currentBasket === 0 && plasticGarbage.includes(currentImage.url)) ||
+            (currentBasket === 1 && metalGarbage.includes(currentImage.url)) ||
+            (currentBasket === 2 && glassGarbage.includes(currentImage.url))
           ) {
             setScore(score + 100);
             switch (currentBasket) {
@@ -310,7 +326,7 @@ export const Game = () => {
           setImgPosition(Math.floor(Math.random() * 80));
           setCurrentImage({
             id: currentImage.id + 1,
-            url: imageUrls[Math.floor(Math.random() * 5)],
+            url: imageUrls[Math.floor(Math.random() * 11)],
           });
         }
       }
@@ -355,16 +371,21 @@ export const Game = () => {
         )}
         <LegendCategory>
           <p> Deseuri de plastic:</p>
-          <img style={{ height: "50px", width: "50px" }} src={tire} />
+          {plasticGarbage.map((url)=>
+            <img style={{ height: "50px", width: "50px" }} src={url} />)
+          }
         </LegendCategory>
         <LegendCategory>
           <p> Deseuri de metal:</p>
-          <img style={{ height: "50px", width: "50px" }} src={can} />
+          {metalGarbage.map((url)=>
+              <img style={{ height: "50px", width: "50px" }} src={url} />)
+          }
         </LegendCategory>
         <LegendCategory>
           <p> Deseuri de sticla:</p>
-          <img style={{ height: "50px", width: "50px" }} src={bottle1} />
-          <img style={{ height: "50px", width: "50px" }} src={bottle2} />
+          {glassGarbage.map((url)=>
+              <img style={{ height: "50px", width: "50px" }} src={url} />)
+          }
         </LegendCategory>
       </LegendContainer>
 
@@ -421,6 +442,12 @@ export const Game = () => {
               cos
             }
           />
+          <h2>{
+              (currentBasket === 0 && "PLASTIC") ||
+              (currentBasket === 1 && "METAL") ||
+              (currentBasket === 2 && "STICLA") ||
+              ""
+          }</h2>
         </GameViewContainer>
         <ButtonContainer>
           <h2 style={{ color: "white" }}>SELECTEAZA COSUL CORECT:</h2>
