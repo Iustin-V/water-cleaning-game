@@ -9,7 +9,10 @@ import metal from "../images/metal.png";
 import sticla from "../images/sticla.png";
 import heart from "../images/heart.png";
 import watereffect from "../images/water.gif";
-import bin from "../images/cos.png";
+import cos from "../images/cos.png";
+import cosPlastic from "../images/cos-plastic.png";
+import cosSticla from "../images/cos-sticla.png";
+import cosMetal from "../images/cos-metal.png";
 
 const GameWrapper = styled.div`
   display: flex;
@@ -181,14 +184,14 @@ const LegendCategory = styled.div`
   }
 `;
 
-const RecycleBin = styled.img<{type:number}>`
-width: 100%;
+const RecycleBin = styled.img`
+  width: 100%;
   position: absolute;
-  bottom:-85px;
+  bottom: -85px;
   left: 0;
   object-fit: contain;
   z-index: 19;
-`
+`;
 export const Game = () => {
   //  refs
   const containerRef = React.useRef<HTMLDivElement | null>(null);
@@ -229,7 +232,6 @@ export const Game = () => {
 
   const handleBasket = (id: number) => {
     setCurrentBasket(id);
-    console.log("currentbasket", currentBasket);
 
     buttonOneRef.current?.classList.remove("active");
     buttonTwoRef.current?.classList.remove("active");
@@ -274,11 +276,10 @@ export const Game = () => {
         }
       } else {
         if (
-            currentImage.url && trashRef.current?.getBoundingClientRect().y &&
+          currentImage.url &&
+          trashRef.current?.getBoundingClientRect().y &&
           trashRef.current?.getBoundingClientRect().y > 550
         ) {
-          console.log(trashRef.current?.getBoundingClientRect().y," ref")
-          console.log(currentBasket, currentImage.url);
           if (
             (currentBasket === 0 && currentImage.url === tire) ||
             (currentBasket === 1 && currentImage.url === can) ||
@@ -412,7 +413,14 @@ export const Game = () => {
               className={`slide-down`}
             />
           }
-          <RecycleBin src={bin} type={currentBasket}/>
+          <RecycleBin
+            src={
+              (currentBasket === 0 && cosPlastic) ||
+              (currentBasket === 1 && cosMetal) ||
+              (currentBasket === 2 && cosSticla) ||
+              cos
+            }
+          />
         </GameViewContainer>
         <ButtonContainer>
           <h2 style={{ color: "white" }}>SELECTEAZA COSUL CORECT:</h2>
