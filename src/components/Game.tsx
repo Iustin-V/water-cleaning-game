@@ -9,6 +9,7 @@ import metal from "../images/metal.png";
 import sticla from "../images/sticla.png";
 import heart from "../images/heart.png";
 import watereffect from "../images/water.gif";
+import bin from "../images/cos.png";
 
 const GameWrapper = styled.div`
   display: flex;
@@ -117,6 +118,7 @@ const Image = styled.img<{ position: number; animationDuration?: number }>`
   animation-duration: ${(props) => props.animationDuration}!important;
   top: 100%;
   visibility: hidden;
+  z-index: 20;
   left: ${(props) => props.position}%;
 `;
 
@@ -178,6 +180,15 @@ const LegendCategory = styled.div`
     font-size: 20px;
   }
 `;
+
+const RecycleBin = styled.img<{type:number}>`
+width: 100%;
+  position: absolute;
+  bottom:-85px;
+  left: 0;
+  object-fit: contain;
+  z-index: 19;
+`
 export const Game = () => {
   //  refs
   const containerRef = React.useRef<HTMLDivElement | null>(null);
@@ -243,22 +254,6 @@ export const Game = () => {
         id: currentImage.id + 1,
         url: imageUrls[Math.floor(Math.random() * 5)],
       });
-      setTimeout(() => {
-        if (
-          trashRef.current?.getBoundingClientRect().y &&
-          trashRef.current?.getBoundingClientRect().y > 550
-        ) {
-          console.log(currentBasket, currentImage.url);
-          if (
-            (currentBasket === 0 && currentImage.url === tire) ||
-            (currentBasket === 1 && currentImage.url === can)
-          ) {
-            setScore(score + 100);
-          } else {
-            setLives(lives - 1);
-          }
-        }
-      }, 2000);
     }
   }, [gameStarted]);
 
@@ -279,9 +274,10 @@ export const Game = () => {
         }
       } else {
         if (
-          trashRef.current?.getBoundingClientRect().y &&
+            currentImage.url && trashRef.current?.getBoundingClientRect().y &&
           trashRef.current?.getBoundingClientRect().y > 550
         ) {
+          console.log(trashRef.current?.getBoundingClientRect().y," ref")
           console.log(currentBasket, currentImage.url);
           if (
             (currentBasket === 0 && currentImage.url === tire) ||
@@ -416,6 +412,7 @@ export const Game = () => {
               className={`slide-down`}
             />
           }
+          <RecycleBin src={bin} type={currentBasket}/>
         </GameViewContainer>
         <ButtonContainer>
           <h2 style={{ color: "white" }}>SELECTEAZA COSUL CORECT:</h2>
