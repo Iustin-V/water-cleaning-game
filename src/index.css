@@ -85,7 +85,7 @@ code {
 /* Apply the animation to the image element */
 img.slide-down {
   -webkit-user-drag: none;
-  animation: slide-down 2s ease-in;
+  animation: slide-down ease-in;
 }
 
 a {

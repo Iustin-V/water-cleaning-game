@@ -1,4 +1,4 @@
-import styled from "styled-components";
+
 import React, { useEffect, useState } from "react";
 import can from "../images/can.png";
 import tire from "../images/tire.png";
@@ -18,195 +18,20 @@ import cos from "../images/cos.png";
 import cosPlastic from "../images/cos-plastic.png";
 import cosSticla from "../images/cos-sticla.png";
 import cosMetal from "../images/cos-metal.png";
+import keyA from "../images/keyA.png"
+import keyS from "../images/keyS.png"
+import keyD from "../images/keyD.png"
+import {
+  ButtonContainer,
+  Catch, Control,
+  GameViewContainer,
+  GameWrapper, Heart, ImageGarbage,
+  LegendCategory,
+  LegendContainer, LegendImages, LivesContainer,
+  MainContainer, RecycleBin, ScoreContainer, StartButton,
+  WaterEffect
+} from "./style";
 
-const GameWrapper = styled.div`
-  display: flex;
-  width: 100vw;
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  gap: 40px;
-`;
-const MainContainer = styled.div`
-  display: flex;
-  height: 90%;
-  width: 45%;
-  gap: 40px;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-`;
-const GameViewContainer = styled.div`
-  width: 100%;
-  height: 75%;
-  background-color: #18586bf0;
-  overflow: hidden;
-  position: relative;
-  border: 3px solid black;
-  border-radius: 20px;
-  >h2 {
-    position: absolute;
-    font-size: 30px;
-    color: white;
-    text-align: center;
-    bottom: 30px;
-    left: 50%;
-    z-index: 20;
-    transform: translateX(-50%);
-  }
-`;
-const LegendContainer = styled.div`
-  width: 25%;
-  height: 90%;
-  background-color: rgba(52, 155, 16, 0.82);
-  border: 3px solid black;
-  border-radius: 20px;
-`;
-const ButtonContainer = styled.div`
-  width: 100%;
-  height: 20%;
-  background-color: rgba(77, 36, 3, 0.9);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  border: 3px solid black;
-  border-radius: 20px;
-  > div {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-  }
-  > h2 {
-    margin: -43px 0 0 0;
-  }
-`;
-const StartButton = styled.button`
-  background: #12254e;
-  padding: 16px;
-  border: 2px solid #000000;
-  border-radius: 15px;
-  color: white;
-  font-weight: bold;
-  font-size: 30px;
-  z-index: 51;
-
-  :hover {
-    background: #2550ad;
-  }
-
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: 0 auto;
-  transform: translate(-50%, -50%);
-
-  > span {
-    font-size: 40px;
-  }
-`;
-const Control = styled.div`
-  z-index: 2;
-  height: 80%;
-  width: 20%;
-  border-radius: 25px;
-  background-color: white;
-  transition: 0.2s ease-in;
-  :hover {
-    background-color: darkgrey;
-    cursor: pointer;
-    > img {
-      transform: scale(1.1);
-    }
-  }
-
-  > img {
-    transition: 0.2s ease-in;
-    height: 100%;
-    -webkit-user-drag: none;
-  }
-`;
-const Image = styled.img<{ position: number; animationDuration?: number }>`
-  width: 50px;
-  position: absolute;
-  color: red;
-  animation-duration: ${(props) => props.animationDuration}!important;
-  top: 100%;
-  visibility: hidden;
-  z-index: 20;
-  left: ${(props) => props.position}%;
-`;
-
-const LivesContainer = styled.div`
-  top: 15px;
-  right: 15px;
-  display: flex;
-  position: absolute;
-  flex-direction: row;
-  gap: 12px;
-  z-index: 51;
-`;
-const ScoreContainer = styled.div`
-  top: 15px;
-  left: 15px;
-  display: flex;
-  position: absolute;
-  flex-direction: row;
-  gap: 15px;
-  z-index: 51;
-
-  font-weight: 700;
-  font-size: 17px;
-  color: white;
-  height: 24px;
-`;
-const Heart = styled.img`
-  width: 24px;
-  z-index: 51;
-`;
-const WaterEffect = styled.img`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  top: 0;
-  left: 0;
-  z-index: 50;
-  opacity: 30%;
-  pointer-events: none;
-`;
-
-const Catch = styled.div`
-  bottom: 20px;
-  color: white;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-`;
-const LegendCategory = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  > p {
-    color: white;
-    font-size: 20px;
-  }
-`;
-
-const RecycleBin = styled.img`
-  width: 100%;
-  position: absolute;
-  bottom: -85px;
-  left: 0;
-  object-fit: contain;
-  z-index: 19;
-`;
 export const Game = () => {
   //  refs
   const containerRef = React.useRef<HTMLDivElement | null>(null);
@@ -225,7 +50,7 @@ export const Game = () => {
   );
 
   //  current data
-  const [currentLevel, setCurrentLevel] = useState(0);
+  const [currentLevel, setCurrentLevel] = useState(1);
   const [currentImage, setCurrentImage] = useState({ id: 0, url: "" });
   const [currentBasket, setCurrentBasket] = useState(4);
 
@@ -282,6 +107,8 @@ export const Game = () => {
         alert(`Game Over!
         Your score is : ${score}, congratulations!`);
         handleGameReset();
+        setCurrentLevel(1);
+        setNextLevelScore(500);
       } else if (score === nextLevelScore) {
         const userConfirmed = window.confirm(
           `Congratulations, you finished the current level. Proceed to the next one?`
@@ -357,6 +184,8 @@ export const Game = () => {
   nu merge selectarea cosului pentru runda curenta, 
   schimbarea are loc abia runda urm*/
 
+  /* ^^^ MERGE TOT NU MAI FII ASA NEGATIVIST*/
+
   return (
     <GameWrapper>
       <LegendContainer>
@@ -364,28 +193,36 @@ export const Game = () => {
           <Catch>
             Ai prins un {lastCatch.name}
             <img
-              style={{ height: "30px", width: "30px" }}
+              style={{ height: "30px", objectFit:"contain"}}
               src={lastCatch.url}
+              alt={"last catch"}
             />
           </Catch>
         )}
         <LegendCategory>
-          <p> Deseuri de plastic:</p>
-          {plasticGarbage.map((url)=>
-            <img style={{ height: "50px", width: "50px" }} src={url} />)
-          }
+          <p style={{color: "#e86800"}} > Deseuri de plastic:</p>
+          <LegendImages>
+            {plasticGarbage.map((url,index)=>
+                <img src={url} alt={`garbage_${index}`} />)
+            }
+          </LegendImages>
+
         </LegendCategory>
         <LegendCategory>
-          <p> Deseuri de metal:</p>
-          {metalGarbage.map((url)=>
-              <img style={{ height: "50px", width: "50px" }} src={url} />)
-          }
+          <p style={{color: "#ffff00"}}> Deseuri de metal:</p>
+          <LegendImages>
+            {metalGarbage.map((url,index)=>
+                <img src={url} alt={`garbage_${index}`} />)
+            }
+          </LegendImages>
         </LegendCategory>
         <LegendCategory>
-          <p> Deseuri de sticla:</p>
-          {glassGarbage.map((url)=>
-              <img style={{ height: "50px", width: "50px" }} src={url} />)
-          }
+          <p style={{color: "#00bb00"}}> Deseuri de sticla:</p>
+          <LegendImages>
+            {glassGarbage.map((url,index)=>
+                <img src={url} alt={`garbage_${index}`} />)
+            }
+          </LegendImages>
         </LegendCategory>
       </LegendContainer>
 
@@ -424,7 +261,7 @@ export const Game = () => {
             </StartButton>
           )}
           {
-            <Image
+            <ImageGarbage
               position={imgPosition}
               src={currentImage.url}
               ref={trashRef}
@@ -453,13 +290,17 @@ export const Game = () => {
           <h2 style={{ color: "white" }}>SELECTEAZA COSUL CORECT:</h2>
           <div>
             <Control ref={buttonOneRef} onClick={() => handleBasket(0)}>
-              <img src={plastic} onClick={() => handleBasket(0)} />
+              <img src={plastic} alt={"plastic bin"} onClick={() => handleBasket(0)} />
+              <img className={"keyboard"} src={keyA} alt={"keyA"} onClick={() => handleBasket(0)} />
+
             </Control>
             <Control ref={buttonTwoRef} onClick={() => handleBasket(1)}>
-              <img src={metal} onClick={() => handleBasket(1)} />
+              <img src={metal} alt={"metal bin"} onClick={() => handleBasket(1)} />
+              <img className={"keyboard"} src={keyS} alt={"keyS"} onClick={() => handleBasket(1)} />
             </Control>
             <Control ref={buttonThreeRef} onClick={() => handleBasket(2)}>
-              <img src={sticla} onClick={() => handleBasket(2)} />
+              <img src={sticla} alt={"sticla bin"} onClick={() => handleBasket(2)} />
+              <img className={"keyboard"} src={keyD} alt={"keyD"} onClick={() => handleBasket(2)} />
             </Control>
           </div>
         </ButtonContainer>
