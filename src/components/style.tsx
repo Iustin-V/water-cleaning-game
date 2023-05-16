@@ -17,6 +17,9 @@ export const MainContainer = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  @media (max-width: 1200px) {
+    width: 90%;
+  }
 `;
 export const GameViewContainer = styled.div`
   width: 100%;
@@ -26,7 +29,7 @@ export const GameViewContainer = styled.div`
   position: relative;
   border: 3px solid black;
   border-radius: 20px;
-  >h2 {
+  > h2 {
     position: absolute;
     font-size: 30px;
     color: white;
@@ -35,6 +38,8 @@ export const GameViewContainer = styled.div`
     left: 50%;
     z-index: 20;
     transform: translateX(-50%);
+
+    margin: 0;
   }
 `;
 export const LegendContainer = styled.div`
@@ -108,7 +113,7 @@ export const Control = styled.div`
       transform: scale(1.1);
     }
   }
-  >.keyboard {
+  > .keyboard {
     transition: 0.2s ease-in;
     height: 45%;
     bottom: -20px;
@@ -122,8 +127,17 @@ export const Control = styled.div`
     object-fit: contain;
     -webkit-user-drag: none;
   }
+  @media (max-width: 1200px) {
+    width: 30%;
+    .keyboard {
+      display: none;
+    }
+  }
 `;
-export const ImageGarbage = styled.img<{ position: number; animationDuration?: number }>`
+export const ImageGarbage = styled.img<{
+  position: number;
+  animationDuration?: number;
+}>`
   height: 50px;
   object-fit: contain;
   position: absolute;
@@ -135,7 +149,6 @@ export const ImageGarbage = styled.img<{ position: number; animationDuration?: n
   left: ${(props) => props.position}%;
   transform: rotate(${(props) => props.position}deg);
 `;
-
 
 export const LivesContainer = styled.div`
   top: 15px;
@@ -205,17 +218,20 @@ export const RecycleBin = styled.img`
   left: 0;
   object-fit: contain;
   z-index: 19;
+  @media (max-width: 1200px) {
+    bottom: -32px;
+  }
 `;
 
-export const LegendImages=styled.div`
+export const LegendImages = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   column-gap: 20px;
   row-gap: 10px;
   padding: 0 30px;
-  >img {
+  > img {
     height: 50px;
     object-fit: contain;
   }
-`
+`;

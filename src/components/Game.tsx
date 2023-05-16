@@ -1,4 +1,4 @@
-
+import swal from "sweetalert";
 import React, { useEffect, useState } from "react";
 import can from "../images/can.png";
 import tire from "../images/tire.png";
@@ -18,18 +18,29 @@ import cos from "../images/cos.png";
 import cosPlastic from "../images/cos-plastic.png";
 import cosSticla from "../images/cos-sticla.png";
 import cosMetal from "../images/cos-metal.png";
-import keyA from "../images/keyA.png"
-import keyS from "../images/keyS.png"
-import keyD from "../images/keyD.png"
+import pahar from "../images/waterglass.png";
+import pahar2 from "../images/wineglass.png";
+import folie from "../images/foil.png";
+import keyA from "../images/keyA.png";
+import keyS from "../images/keyS.png";
+import keyD from "../images/keyD.png";
 import {
   ButtonContainer,
-  Catch, Control,
+  Catch,
+  Control,
   GameViewContainer,
-  GameWrapper, Heart, ImageGarbage,
+  GameWrapper,
+  Heart,
+  ImageGarbage,
   LegendCategory,
-  LegendContainer, LegendImages, LivesContainer,
-  MainContainer, RecycleBin, ScoreContainer, StartButton,
-  WaterEffect
+  LegendContainer,
+  LegendImages,
+  LivesContainer,
+  MainContainer,
+  RecycleBin,
+  ScoreContainer,
+  StartButton,
+  WaterEffect,
 } from "./style";
 
 export const Game = () => {
@@ -58,10 +69,10 @@ export const Game = () => {
   const [lives, setLives] = useState(3);
   const [score, setScore] = useState(0);
 
-  let imageUrls = [can, tire, can, tire, bottle1, bottle2, bottle, bag, bluebottle, key, conserve];
   let plasticGarbage = [tire, bottle, bag, bluebottle];
-  let metalGarbage=[can,key,conserve]
-  let glassGarbage=[bottle1,bottle2]
+  let metalGarbage = [can, key, conserve, folie];
+  let glassGarbage = [bottle1, bottle2, pahar, pahar2];
+  let imageUrls = [...plasticGarbage, ...metalGarbage, ...glassGarbage];
 
   // game logic
   const handleGameReset = () => {
@@ -104,28 +115,55 @@ export const Game = () => {
   React.useEffect(() => {
     if (gameStarted) {
       if (lives === 0) {
-        alert(`Game Over!
-        Your score is : ${score}, congratulations!`);
+        // alert(`Game Over!
+        // Your score is : ${score}, congratulations!`);
+        swal({
+          title: "Sfarsitul jocului",
+          text: `Ai ajuns pana la nivelul : ${currentLevel}`,
+          icon: "error",
+          buttons: {
+            confirm: {
+              text: "Incearca din nou",
+              value: true,
+              visible: true,
+              className: "",
+              closeModal: true,
+            },
+          },
+          dangerMode: true,
+        });
         handleGameReset();
         setCurrentLevel(1);
         setNextLevelScore(500);
       } else if (score === nextLevelScore) {
-        const userConfirmed = window.confirm(
-          `Congratulations, you finished the current level. Proceed to the next one?`
-        );
-        if (userConfirmed) {
-          setCurrentLevel(currentLevel + 1);
-          setNextLevelScore(nextLevelScore + 200);
-          handleGameReset();
-        }
+        swal({
+          title: "Felicitari !!",
+          text: `Ai terminat nivelul: ${currentLevel}`,
+          icon: "success",
+          buttons: {
+            confirm: {
+              text: "Mergi mai departe",
+              value: true,
+              visible: true,
+              className: "confirm-button",
+              closeModal: true,
+            },
+          },
+          dangerMode: true,
+        });
+        setCurrentLevel(currentLevel + 1);
+        setNextLevelScore(nextLevelScore + 200);
+        handleGameReset();
       } else {
         if (
           currentImage.url &&
           trashRef.current?.getBoundingClientRect().y &&
-          trashRef.current?.getBoundingClientRect().y > 550
+          trashRef.current?.getBoundingClientRect().y >
+            (containerRef?.current?.clientHeight || 0) - 50
         ) {
           if (
-            (currentBasket === 0 && plasticGarbage.includes(currentImage.url)) ||
+            (currentBasket === 0 &&
+              plasticGarbage.includes(currentImage.url)) ||
             (currentBasket === 1 && metalGarbage.includes(currentImage.url)) ||
             (currentBasket === 2 && glassGarbage.includes(currentImage.url))
           ) {
@@ -188,43 +226,44 @@ export const Game = () => {
 
   return (
     <GameWrapper>
-      <LegendContainer>
-        {lastCatch.name && (
-          <Catch>
-            Ai prins un {lastCatch.name}
-            <img
-              style={{ height: "30px", objectFit:"contain"}}
-              src={lastCatch.url}
-              alt={"last catch"}
-            />
-          </Catch>
-        )}
-        <LegendCategory>
-          <p style={{color: "#e86800"}} > Deseuri de plastic:</p>
-          <LegendImages>
-            {plasticGarbage.map((url,index)=>
-                <img src={url} alt={`garbage_${index}`} />)
-            }
-          </LegendImages>
-
-        </LegendCategory>
-        <LegendCategory>
-          <p style={{color: "#ffff00"}}> Deseuri de metal:</p>
-          <LegendImages>
-            {metalGarbage.map((url,index)=>
-                <img src={url} alt={`garbage_${index}`} />)
-            }
-          </LegendImages>
-        </LegendCategory>
-        <LegendCategory>
-          <p style={{color: "#00bb00"}}> Deseuri de sticla:</p>
-          <LegendImages>
-            {glassGarbage.map((url,index)=>
-                <img src={url} alt={`garbage_${index}`} />)
-            }
-          </LegendImages>
-        </LegendCategory>
-      </LegendContainer>
+      {window.innerWidth > 1200 && (
+        <LegendContainer>
+          {lastCatch.name && (
+            <Catch>
+              Ai prins un {lastCatch.name}
+              <img
+                style={{ height: "30px", objectFit: "contain" }}
+                src={lastCatch.url}
+                alt={"last catch"}
+              />
+            </Catch>
+          )}
+          <LegendCategory>
+            <p style={{ color: "#e86800" }}> Deseuri de plastic:</p>
+            <LegendImages>
+              {plasticGarbage.map((url, index) => (
+                <img src={url} alt={`garbage_${index}`} />
+              ))}
+            </LegendImages>
+          </LegendCategory>
+          <LegendCategory>
+            <p style={{ color: "#ffff00" }}> Deseuri de metal:</p>
+            <LegendImages>
+              {metalGarbage.map((url, index) => (
+                <img src={url} alt={`garbage_${index}`} />
+              ))}
+            </LegendImages>
+          </LegendCategory>
+          <LegendCategory>
+            <p style={{ color: "#00bb00" }}> Deseuri de sticla:</p>
+            <LegendImages>
+              {glassGarbage.map((url, index) => (
+                <img src={url} alt={`garbage_${index}`} />
+              ))}
+            </LegendImages>
+          </LegendCategory>
+        </LegendContainer>
+      )}
 
       <MainContainer>
         <GameViewContainer
@@ -234,7 +273,8 @@ export const Game = () => {
               "left:",
               containerRef?.current?.offsetLeft,
               "top:",
-              containerRef?.current?.offsetTop
+              (containerRef?.current?.offsetTop || 0) +
+                (containerRef?.current?.clientHeight || 0)
             )
           }
         >
@@ -279,28 +319,54 @@ export const Game = () => {
               cos
             }
           />
-          <h2>{
-              (currentBasket === 0 && "PLASTIC") ||
+          <h2>
+            {(currentBasket === 0 && "PLASTIC") ||
               (currentBasket === 1 && "METAL") ||
               (currentBasket === 2 && "STICLA") ||
-              ""
-          }</h2>
+              ""}
+          </h2>
         </GameViewContainer>
         <ButtonContainer>
           <h2 style={{ color: "white" }}>SELECTEAZA COSUL CORECT:</h2>
           <div>
             <Control ref={buttonOneRef} onClick={() => handleBasket(0)}>
-              <img src={plastic} alt={"plastic bin"} onClick={() => handleBasket(0)} />
-              <img className={"keyboard"} src={keyA} alt={"keyA"} onClick={() => handleBasket(0)} />
-
+              <img
+                src={plastic}
+                alt={"plastic bin"}
+                onClick={() => handleBasket(0)}
+              />
+              <img
+                className={"keyboard"}
+                src={keyA}
+                alt={"keyA"}
+                onClick={() => handleBasket(0)}
+              />
             </Control>
             <Control ref={buttonTwoRef} onClick={() => handleBasket(1)}>
-              <img src={metal} alt={"metal bin"} onClick={() => handleBasket(1)} />
-              <img className={"keyboard"} src={keyS} alt={"keyS"} onClick={() => handleBasket(1)} />
+              <img
+                src={metal}
+                alt={"metal bin"}
+                onClick={() => handleBasket(1)}
+              />
+              <img
+                className={"keyboard"}
+                src={keyS}
+                alt={"keyS"}
+                onClick={() => handleBasket(1)}
+              />
             </Control>
             <Control ref={buttonThreeRef} onClick={() => handleBasket(2)}>
-              <img src={sticla} alt={"sticla bin"} onClick={() => handleBasket(2)} />
-              <img className={"keyboard"} src={keyD} alt={"keyD"} onClick={() => handleBasket(2)} />
+              <img
+                src={sticla}
+                alt={"sticla bin"}
+                onClick={() => handleBasket(2)}
+              />
+              <img
+                className={"keyboard"}
+                src={keyD}
+                alt={"keyD"}
+                onClick={() => handleBasket(2)}
+              />
             </Control>
           </div>
         </ButtonContainer>

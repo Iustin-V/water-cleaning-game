@@ -28,6 +28,14 @@
   color: #61dafb;
 }
 
+.confirm-button,
+.confirm-button:active,
+.confirm-button:hover {
+  background-color: #016832 !important;
+}
+.confirm-button:focus {
+  box-shadow: 0 0 0 1px #fff, 0 0 0 3px #a5dc86;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
